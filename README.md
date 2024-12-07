@@ -23,3 +23,5 @@
     "randint"整数(需求条件a<b,为什么,因为a>b没结果,a=b出值已知)
     "list"列表(空列表将返回None,所以没结果,所以列表要有最少一个值)
 
+# 下载
+[Windows-x64](blob:https://github.com/9fbb853b-321b-441c-baaa-ceb0738dbe1d)
