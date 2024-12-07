@@ -1,6 +1,5 @@
 #  Copyright (c)
 import logging
-import sys
 # UI部分
 import tkinter as tk
 from datetime import datetime
@@ -33,12 +32,6 @@ if True:
     # 修改root logger的名称
     root_logger.name = 'tk_configure'
     logging.info(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-
-
-# 强制退出
-def sys_exit(message: str = None):
-    logging.debug(f'sys exit:{message}')
-    sys.exit()
 
 
 def close_win(win: tk.Tk):
@@ -84,7 +77,7 @@ def pack_button(win: tk.Tk, t_text: str, t_command, x: int = 0, y: int = 0):
 
 
 # 布置输入框
-def pack_entry(win: tk.Tk, t_width: int=50, default_text: str=None, x: int = 0, y: int = 0) -> tk.Entry:
+def pack_entry(win: tk.Tk, t_width: int=100, default_text: str=None, x: int = 0, y: int = 0) -> tk.Entry:
     # default_text为默认文本
     logging.info(f'pack entry\\default_text:{default_text}')
     entry = tk.Entry(win, width=t_width)

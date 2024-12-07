@@ -11,24 +11,28 @@ if True:
 
 
 def w_json(a, name: str, encoding: str = 'utf-8'):
+    logging.info(f'w_json\\name:{name}\n{a}')
     try:
         with open(f'{file_path}{name}.json', 'w+', encoding=encoding) as f:
             json.dump(a, f, indent=4, ensure_ascii=False)
             return True
 
     except Exception as e:
-        print(e)
+        logging.error(e)
+        # print(e)
         return False
 
 
 def r_json(name: str, encoding: str = 'utf-8'):
+    logging.info(f'r_json\\name:{name}')
     try:
         with open(f'{file_path}{name}.json', 'r+', encoding=encoding) as f:
             a = json.load(f)
             return a
 
     except Exception as e:
-        print(e)
+        logging.error(e)
+        # print(e)
         return None
 
 logging.info('json ok and exit')

@@ -17,7 +17,7 @@ else:
     file_path = '.\\'
 
 # 目录补全
-os.makedirs(os.path.dirname(file_path), exist_ok=True)
+os.makedirs(os.path.dirname(file_path), exist_ok=True) # 虽然我并不知道.\\为什么需要补全)
 os.makedirs(os.path.dirname(log_path), exist_ok=True)
 
 if True:
