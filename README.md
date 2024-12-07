@@ -23,5 +23,6 @@
     "randint"整数(需求条件a<b,为什么,因为a>b没结果,a=b出值已知)
     "list"列表(空列表将返回None,所以没结果,所以列表要有最少一个值)
 
-# 下载
+# 下载包
+因为不知道怎么直接下载,所以请手动下载压缩包
 [Windows-x64](https://github.com/702361946/random_app_tk/blob/main/dist/app_Windows_x64.zip)
