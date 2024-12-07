@@ -24,4 +24,4 @@
     "list"列表(空列表将返回None,所以没结果,所以列表要有最少一个值)
 
 # 下载
-.[Windows-x64](https://github.com/702361946/random_app_tk/blob/main/dist/app_Windows_x64.zip)
+[Windows-x64](https://github.com/702361946/random_app_tk/blob/main/dist/app_Windows_x64.zip)
