@@ -22,7 +22,7 @@ def main():
         pack_button(
             win,
             '抽取',
-            lambda: [random_randint(get_entry(_min), get_entry(_max)), delete_entry_s([_min, _max])],
+            lambda: random_randint(get_entry(_min), get_entry(_max)),
             x=80,
             y=70
         )
