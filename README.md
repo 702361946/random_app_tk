@@ -26,3 +26,6 @@
     "randint"整数(需求条件a<b,为什么,因为a>b没结果,a=b出值已知)
     "list"列表(空列表将返回None,所以没结果,所以列表要有最少一个值)
 
+# 打包版
+[点此跳转](https://github.com/702361946/random_app_tk/dist/random_app_Windows_24-12-14_x86)
+
