@@ -16,30 +16,18 @@ default_configure = {
     # "random_list_None_list_error": True # 用来检查过完权重后的list,list为空([])就报错,不过这玩意命名貌似有点长?貌似没什么用
 }
 mode_s = ['randint', 'list']
-user_configure = default_configure
-temp = {}
-
-
-def sys_exit(message: str = None):
-    logging.info(f'sys exit:{message}')
-    sys.exit()
-
-
-def save_configure(_configure: dict = None):
-    if _configure is None:
-        _configure = user_configure
-    logging.info('save configure')
-    w_json(_configure, 'configure')
-
 
 def up_save_configure() -> dict:
     def configure_file_error():
         logging.error('配置文件未知')
-        messagebox.showerror('error', '读取配置文件时出错,请检查是否有手动修改错误')
+        messagebox.showerror(
+            'error',
+            '读取配置文件时出错,请检查是否有手动修改错误\n如果是第一次启动,请点击确定后重置配置'
+        )
         if messagebox.askquestion('info', '是否需要重置配置?'):
             logging.info('重置配置文件')
             _re = default_configure
-            save_configure(re)
+            w_json(default_configure, 'configure')
             return _re
         else:
             subprocess.Popen(['notepad.exe', f"{file_path}configure.json"], shell=True)
@@ -64,6 +52,22 @@ def up_save_configure() -> dict:
 
     return re
 
+# 不从文件拿会出点神奇问题,所以别改,嗯……
+user_configure = up_save_configure()
+temp = {}
+
+
+def sys_exit(message: str = None):
+    logging.info(f'sys exit:{message}')
+    sys.exit()
+
+
+def save_configure(_configure: dict = None):
+    if _configure is None:
+        _configure = user_configure
+    logging.info('save configure')
+    w_json(_configure, 'configure')
+
 
 def r_configure():
     """
@@ -74,14 +78,25 @@ def r_configure():
     messagebox.showinfo('info', '重置完成,重启应用生效')
 
 
-def save_settings(mode):
-    logging.info(f'save settings\nmode:{mode}')
-    if mode in mode_s:
-        user_configure['mode'] = mode
-        save_configure(user_configure)
-    else:
-        messagebox.showinfo('error', '请检查模式是否存在')
+def save_settings(mode: str = None, _list: list = None):
+    logging.info(f'save settings\nmode:{mode}\nlist:{_list}')
+    if mode:
+        if mode in mode_s:
+            user_configure['mode'] = mode
+        else:
+            messagebox.showinfo('error', '请检查模式是否存在')
 
+    if _list is not None:
+        if type(_list).__name__ != 'list':
+            logging.info('type not list')
+            messagebox.showinfo('info', '传入参错误')
+        elif not _list:
+            logging.info('len list is None')
+            messagebox.showerror('error', '列表不能为空')
+        else:
+            user_configure['random_list'] = _list
+
+    save_configure(user_configure)
     messagebox.showinfo('info', '保存完成,重启应用生效')
 
 
@@ -152,15 +167,6 @@ def random_list(_a: list):
     _r = _r[random.randint(0, len(_r) - 1)]
     logging.info(f'list:{_r}')
     messagebox.showinfo('list', message=f'抽出来了:\n{_r}')
-
-
-def random_list_settings():
-    logging.info('settings random list')
-    subprocess.Popen(['notepad.exe', f"{file_path}configure.json"], shell=True)
-    subprocess.Popen(['notepad.exe', ".\\README.md"], shell=True) # 这个没有也无关紧要
-    messagebox.showinfo('info', '请修改键"random_list",修改完成后请保存并重启应用')
-    messagebox.showinfo('info', '按下确定以退出')
-    sys_exit('作者无能,无法写出列表编辑器,用户将自行修改,程序退出以保证其不会再用')
 
 
 logging.info('main_configure ok and exit')

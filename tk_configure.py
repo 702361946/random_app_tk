@@ -124,6 +124,87 @@ def delete_entry_s(s: list):
     for i in s:
         delete_entry(i)
 
+
+def pack_list(
+        win: tk.Tk,
+        h: int = 1,
+        w: int = 10,
+        yscrollcommand: bool = False,
+        x: int = 0,
+        y: int = 0,
+        _t = None
+    ) -> tk.Listbox:
+    """
+    用以创建一个列表
+    :param win: 父部件
+    :param h: 行数
+    :param w: 宽度
+    :param yscrollcommand: 竖向滚动
+    :param x: 滚动条组件左上角x位置
+    :param y: 滚动条组件左上角y位置,是的没看错,就是滚动条
+    :param _t: 插入的内容,必须为list,不然……
+    :return: tk.Listbox组件
+    """
+    logging.info('pack list')
+
+    if _t is None:
+        _t = [None]
+    else:
+        _t = list(_t)
+
+    _list = tk.Listbox(win, height=h, width=w)
+
+    for i in _t:
+        _list.insert(tk.END, i)
+
+    if yscrollcommand:
+        scrollbar = tk.Scrollbar(win, orient="vertical", command=_list.yview)
+        _list.config(yscrollcommand=scrollbar.set)
+        scrollbar.place(x=x, y=y, height=win_geometry.split('x')[1]) # 竖向滚动条
+
+    _list.pack(side=tk.LEFT)
+
+    return _list
+
+
+def get_list(_list: tk.Listbox, a: int, b: int = None) -> list:
+    logging.info(f'get list\\a:{a}\\b:{b}')
+    if b is None:
+        b = a
+    return list(_list.get(a, b))
+
+
+def add_list(_list: tk.Listbox, a: list, b: int = None):
+    """
+    向列表加个变量
+    :param _list:
+    :param a:
+    :param b:
+    :return:
+    """
+    logging.info(f'add list\\a:{a}\\b:{b}')
+
+    if type(a).__name__ != 'list':
+        a = [a]
+    if b is None:
+        b = tk.END
+
+    for i in a:
+        _list.insert(b, i)
+
+
+def delete_list(_list: tk.Listbox, a: int, b: int = None):
+    """
+    删除指定范围内的值
+    :param _list:
+    :param a:
+    :param b:
+    :return:
+    """
+    logging.info(f'delete list\\a:{a}')
+
+    _list.delete(a, b)
+
     
 logging.info('tk_configure ok and exit')
 logging.info(f'{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}\n')
