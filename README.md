@@ -27,5 +27,5 @@
     "list"列表(空列表将返回None,所以没结果,所以列表要有最少一个值)
 
 # 打包版
-[点此跳转](https://github.com/702361946/random_app_tk/dist/random_app_Windows_24-12-14_x86)
+[点此跳转](https://github.com/702361946/random_app_tk/blob/main/dist/random_app_Windows_24-12-14_x86.zip)
 
