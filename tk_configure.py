@@ -132,7 +132,8 @@ def pack_list(
         yscrollcommand: bool = False,
         x: int = 0,
         y: int = 0,
-        _t = None
+        _t = None,
+        lr: str = 'L'
     ) -> tk.Listbox:
     """
     用以创建一个列表
@@ -143,6 +144,7 @@ def pack_list(
     :param x: 滚动条组件左上角x位置
     :param y: 滚动条组件左上角y位置,是的没看错,就是滚动条
     :param _t: 插入的内容,必须为list,不然……
+    :param lr: 控制组件贴边,只有两个状态,L,R
     :return: tk.Listbox组件
     """
     logging.info('pack list')
@@ -162,7 +164,16 @@ def pack_list(
         _list.config(yscrollcommand=scrollbar.set)
         scrollbar.place(x=x, y=y, height=win_geometry.split('x')[1]) # 竖向滚动条
 
-    _list.pack(side=tk.LEFT)
+    match lr:
+        case 'L':
+            logging.info('pack L')
+            _list.pack(side=tk.LEFT)
+        case 'R':
+            logging.info('pack R')
+            _list.pack(side=tk.RIDGE)
+        case _:
+            logging.info('lr not L or R')
+            _list.pack()
 
     return _list
 

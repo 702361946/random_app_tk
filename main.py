@@ -14,6 +14,8 @@ def main():
     win.geometry(win_geometry)
     win.resizable(win_resizable[0], win_resizable[1])
 
+    win.protocol("WM_DELETE_WINDOW", lambda: sys_exit("user in main page exit"))
+
     logging.info(f'mode:{user_configure["mode"]}')
     if user_configure['mode'] == 'randint':
         _min = pack_entry(win, default_text='请输入最小值', y=0)
@@ -53,7 +55,20 @@ def settings_page(win: tkinter.Tk):
     # 监听窗口关闭事件
     sub_window.protocol("WM_DELETE_WINDOW", lambda: sys_exit("user in settings page exit"))
 
-    pack_button(sub_window, "返回", lambda: [close_win(sub_window), deiconify_win(win)], x=160, y=70)
+    pack_button(
+        sub_window,
+        "返回",
+        lambda: [close_win(sub_window), deiconify_win(win)],
+        x=165,
+        y=70
+    )
+    pack_button(
+        sub_window,
+        '权重编辑',
+        lambda: weight_settings(sub_window),
+        x=100,
+        y=70
+    )
     pack_button(
         sub_window,
         '重置',
@@ -70,7 +85,7 @@ def settings_page(win: tkinter.Tk):
             save_settings(get_entry(_mode)),
             delete_entry_s([_mode]),
         ],
-        x=80,
+        x=50,
         y=70
     )
 
@@ -97,13 +112,61 @@ def random_list_settings(win: tk.Tk):
 
     _list = pack_list(
         sub_window,
-        h=len(user_configure['random_list']),
+        h=5,
         yscrollcommand=True,
         _t=user_configure['random_list'],
         x=70
     )
     pack_button(sub_window, '保存', lambda: save_settings(
-        _list=get_list(_list, 0, tk.END)
+        random_list=get_list(_list, 0, tk.END)
+    ), x=90, y=70)
+    pack_button(sub_window, '取消', lambda: [
+        close_win(sub_window),
+        deiconify_win(win)
+    ], x=165, y=70)
+    entry = pack_entry(sub_window, x=90)
+    pack_button(sub_window, '添加', lambda: [
+        add_list(_list, get_entry(entry), tk.END),
+        delete_entry(entry)
+    ], x=90, y=20)
+    pack_button(
+        sub_window,
+        '删除选中',
+        lambda: delete_list(_list, _list.curselection()),
+        x=140,
+        y=20
+    )
+
+    sub_window.mainloop()
+
+    deiconify_win(win)
+
+
+def weight_settings(win: tk.Tk):
+    logging.info('weight settings')
+
+    withdraw_win(win)
+
+    sub_window = tk.Tk()
+    sub_window.title("weight settings")
+    sub_window.geometry(win_geometry)
+    sub_window.resizable(win_resizable[0], win_resizable[1])
+
+    # 监听窗口关闭事件
+    sub_window.protocol(
+        "WM_DELETE_WINDOW",
+        lambda: sys_exit("user in weight settings page exit")
+    )
+
+    _list = pack_list(
+        sub_window,
+        h=5,
+        yscrollcommand=True,
+        _t=user_configure['weight'].keys(),
+        x=70
+    )
+    pack_button(sub_window, '保存', lambda: save_settings(
+        weight=get_list(_list, 0, tk.END) # <-乐
     ), x=90, y=70)
     pack_button(sub_window, '取消', lambda: [
         close_win(sub_window),

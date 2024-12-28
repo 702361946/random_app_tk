@@ -1,3 +1,4 @@
+import logging
 import random
 import subprocess
 import sys
@@ -43,11 +44,16 @@ def up_save_configure() -> dict:
             re = configure_file_error()
 
     # 权重翻新
+    t = {}
     for k in re['weight'].keys():
         try:
-            re['weight'][int(k)] = re['weight'].pop(k)
-        except TypeError:
-            pass
+            t[int(k)] = int(re['weight'][k])
+        except ValueError:
+            try:
+                t[k] = int(re['weight'][k])
+            except ValueError:
+                logging.error(f'weight key:{k} value not int')
+    re['weight'] = t
     logging.info(f'weight\n{re["weight"]}')
 
     return re
@@ -78,26 +84,43 @@ def r_configure():
     messagebox.showinfo('info', '重置完成,重启应用生效')
 
 
-def save_settings(mode: str = None, _list: list = None):
-    logging.info(f'save settings\nmode:{mode}\nlist:{_list}')
+def save_settings(mode: str = None, random_list: list = None, weight: dict = None) -> bool:
+    logging.info(f'save settings\nmode:{mode}\nrandom_list:{random_list}\nweight:{weight}')
     if mode:
         if mode in mode_s:
             user_configure['mode'] = mode
         else:
             messagebox.showinfo('error', '请检查模式是否存在')
+            return False
 
-    if _list is not None:
-        if type(_list).__name__ != 'list':
-            logging.info('type not list')
+    if random_list:
+        if type(random_list).__name__ != 'list':
+            logging.info('random_list type is not list')
             messagebox.showinfo('info', '传入参错误')
-        elif not _list:
-            logging.info('len list is None')
-            messagebox.showerror('error', '列表不能为空')
+            return False
         else:
-            user_configure['random_list'] = _list
+            user_configure['random_list'] = random_list
+
+    if weight:
+        if type(weight).__name__ == 'list': # <-不懂写weight_settings然后"神之一手"
+            logging.info('weight is list -> dict')
+            t = {}
+            for k in weight:
+                if k in user_configure['weight'].keys():
+                    t[k] = user_configure['weight'][k]
+                else:
+                    t[k] = 1
+            weight = t
+        if type(weight).__name__ != 'dict':
+            logging.info('weight type is not dict')
+            messagebox.showinfo('info', '传入参错误')
+            return False
+        else:
+            user_configure['weight'] = weight
 
     save_configure(user_configure)
     messagebox.showinfo('info', '保存完成,重启应用生效')
+    return True
 
 
 def random_randint(_a: int, _b: int):
